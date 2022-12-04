@@ -1,8 +1,8 @@
 const fs = require("fs");
 const data = fs.readFileSync("./input.txt").toString();
 
-function intersects(a, b) {
-  return new Set([...a].filter((i) => b.has(i)));
+function intersects(xs, ys) {
+  return new Set([...xs].filter((x) => ys.has(x)));
 }
 
 const eqSet = (xs, ys) =>
@@ -13,26 +13,26 @@ const lines = data
   .map((line) =>
     line
       .split(",")
-      .map((section) => section.split("-").map((c) => +c))
-      .map((cs) => {
+      .map((section) => section.split("-").map((number) => +number))
+      .map((set) => {
         let arr = [];
-        for (let i = cs[0]; i <= cs[1]; i++) {
+        for (let i = set[0]; i <= set[1]; i++) {
           arr.push(i);
         }
         return new Set(arr);
       })
   )
-  .map((cs) => [cs[0], cs[1], intersects(cs[0], cs[1])]);
+  .map((sets) => [sets[0], sets[1], intersects(sets[0], sets[1])]);
 
 console.log(
   "part 1:",
-  lines.filter((cs) => {
-    return eqSet(cs[0], cs[2]) || eqSet(cs[1], cs[2]);
+  lines.filter((sets) => {
+    return eqSet(sets[0], sets[2]) || eqSet(sets[1], sets[2]);
   }).length
 );
 console.log(
   "part 2:",
-  lines.filter((cs) => {
-    return cs[2].size > 0;
+  lines.filter((sets) => {
+    return sets[2].size > 0;
   }).length
 );
